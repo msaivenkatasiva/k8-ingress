@@ -35,3 +35,25 @@ spec:
   - protocol: TCP
     port: 80 #service-port
     targetPort: 80 #target-port
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app1
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/tags: Environment=dev,Team=test
+    alb.ingress.kubernetes.io/group.name: joindevops
+spec:
+  rules:
+  - host: "app1.devops76.sbs" #ALB rule
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: app1 #ALB target group
+            port:
+              number: 80
